@@ -4,8 +4,8 @@ let lives = 5;
 let score = 0;
 let currentPattern = [];
 let correctAnswer = null;
-let hintsAvailable = 2; // Pistas disponibles
-let currentPatternType = ""; // Para mostrar el tipo de patrón
+let hintsAvailable = 2;
+let currentPatternType = "";
 
 // Iconos de Lucide organizados por categorías
 const iconSets = {
@@ -66,13 +66,11 @@ function getRandomIcons(count, round) {
   let selectedIcons = [];
 
   if (round <= 3) {
-    // Rondas fáciles: una categoría
     const categories = Object.keys(iconSets);
     const category = categories[Math.floor(Math.random() * categories.length)];
     const categoryIcons = iconSets[category];
     selectedIcons = categoryIcons.slice(0, count);
   } else if (round <= 6) {
-    // Rondas medias: dos categorías
     const categories = Object.keys(iconSets);
     const cat1 = categories[Math.floor(Math.random() * categories.length)];
     let cat2 = categories[Math.floor(Math.random() * categories.length)];
@@ -84,13 +82,11 @@ function getRandomIcons(count, round) {
       ...iconSets[cat2].slice(0, Math.floor(count / 2)),
     ];
   } else {
-    // Rondas difíciles: todas las categorías mezcladas
     const allIcons = Object.values(iconSets).flat();
     const shuffled = [...allIcons].sort(() => Math.random() - 0.5);
     selectedIcons = shuffled.slice(0, count);
   }
 
-  // Asignar colores a cada icono
   return selectedIcons.map((icon, index) => ({
     name: icon,
     color: colors[index % colors.length],
@@ -110,83 +106,32 @@ function createParticles() {
   }
 }
 
-// Botón de inicio
-document.getElementById("start-game-btn").addEventListener("click", () => {
-  const startScreen = document.getElementById("start-screen");
-  const gameScreen = document.getElementById("game-screen");
-
-  startScreen.style.opacity = "0";
-  startScreen.style.transition = "opacity 0.5s";
-
-  setTimeout(() => {
-    startScreen.classList.add("hidden");
-    gameScreen.classList.remove("hidden");
-    gameScreen.style.opacity = "0";
-
-    setTimeout(() => {
-      gameScreen.style.transition = "opacity 0.5s";
-      gameScreen.style.opacity = "1";
-    }, 50);
-  }, 500);
-});
-
-// ⚠️ BOTÓN DE PRUEBA TEMPORAL - ELIMINAR ANTES DE PRODUCCIÓN ⚠️
-document.getElementById("skip-to-victory-btn").addEventListener("click", () => {
-  const startScreen = document.getElementById("start-screen");
-  const victoryScreen = document.getElementById("victory-screen");
-
-  console.log("🚀 Saltando al final (modo prueba)");
-
-  startScreen.style.opacity = "0";
-  startScreen.style.transition = "opacity 0.5s";
-
-  setTimeout(() => {
-    startScreen.classList.add("hidden");
-    victoryScreen.classList.remove("hidden");
-    victoryScreen.style.opacity = "0";
-
-    setTimeout(() => {
-      victoryScreen.style.transition = "opacity 0.5s";
-      victoryScreen.style.opacity = "1";
-      lucide.createIcons();
-    }, 50);
-  }, 500);
-});
-// ⚠️ FIN BOTÓN DE PRUEBA ⚠️
-
 // Generar patrón según la dificultad de la ronda
 function generatePattern(round) {
-  const patternLength = Math.min(4 + round, 9); // Patrones más largos
+  const patternLength = Math.min(4 + round, 9);
   const pattern = [];
   const numIcons = Math.min(3 + Math.floor(round / 2), 8);
   const availableIcons = getRandomIcons(numIcons + 3, round);
 
-  // Tipos de patrones según la ronda (progresivamente más difíciles)
   let patternTypes = [];
 
   if (round <= 2) {
-    // Rondas 1-2: Patrones básicos
     patternTypes = ["simple", "alternating"];
   } else if (round <= 4) {
-    // Rondas 3-4: Patrones intermedios
     patternTypes = ["alternating", "doubling", "skip"];
   } else if (round <= 6) {
-    // Rondas 5-6: Patrones avanzados
     patternTypes = ["triple", "reverse", "pyramid", "skip"];
   } else if (round <= 8) {
-    // Rondas 7-8: Patrones complejos
     patternTypes = ["fibonacci", "mirror", "growing", "reverse"];
   } else {
-    // Rondas 9-10: Patrones muy difíciles
     patternTypes = ["fibonacci", "complex", "mixed", "rotation"];
   }
 
   const type = patternTypes[Math.floor(Math.random() * patternTypes.length)];
-  currentPatternType = type; // Guardar el tipo para pistas
+  currentPatternType = type;
 
   switch (type) {
     case "simple":
-      // A B A B A B (básico)
       for (let i = 0; i < patternLength; i++) {
         pattern.push(availableIcons[i % 2]);
       }
@@ -194,7 +139,6 @@ function generatePattern(round) {
       break;
 
     case "alternating":
-      // A B C A B C (alternancia de 3)
       for (let i = 0; i < patternLength; i++) {
         pattern.push(availableIcons[i % 3]);
       }
@@ -202,7 +146,6 @@ function generatePattern(round) {
       break;
 
     case "doubling":
-      // A A B B C C (duplicación)
       let dubIndex = 0;
       for (let i = 0; i < patternLength; i++) {
         pattern.push(availableIcons[dubIndex]);
@@ -216,7 +159,6 @@ function generatePattern(round) {
       break;
 
     case "skip":
-      // A B C D A B C D (salto - cada 4)
       for (let i = 0; i < patternLength; i++) {
         pattern.push(availableIcons[i % 4]);
       }
@@ -224,7 +166,6 @@ function generatePattern(round) {
       break;
 
     case "triple":
-      // A A A B B B C C C (triplicación)
       let triIndex = 0;
       for (let i = 0; i < patternLength; i++) {
         pattern.push(availableIcons[triIndex]);
@@ -238,7 +179,6 @@ function generatePattern(round) {
       break;
 
     case "reverse":
-      // A B C C B A (patrón reverso)
       const halfLen = Math.floor(patternLength / 2);
       for (let i = 0; i < halfLen; i++) {
         pattern.push(availableIcons[i]);
@@ -254,7 +194,6 @@ function generatePattern(round) {
       break;
 
     case "pyramid":
-      // A B C B A B C B (pirámide)
       const pyramidBase = Math.min(3, availableIcons.length);
       let pyrIndex = 0;
       let pyrDirection = 1;
@@ -273,8 +212,6 @@ function generatePattern(round) {
       break;
 
     case "fibonacci":
-      // A B A B B A B B B (patrón Fibonacci simplificado)
-      // 1 1 2 3 (cantidad de veces)
       const fibSeq = [1, 1, 2, 3, 2, 1];
       let fibPosition = 0;
       let fibIconIndex = 0;
@@ -299,7 +236,6 @@ function generatePattern(round) {
       break;
 
     case "mirror":
-      // A B C D D C B A (espejo perfecto)
       const mirrorHalf = Math.floor(patternLength / 2);
       for (let i = 0; i < mirrorHalf; i++) {
         pattern.push(availableIcons[i]);
@@ -319,7 +255,6 @@ function generatePattern(round) {
       break;
 
     case "growing":
-      // A B B C C C D D D D (creciente)
       let growIndex = 0;
       let growRepeat = 1;
       let growCount = 0;
@@ -343,12 +278,11 @@ function generatePattern(round) {
       break;
 
     case "complex":
-      // A B A C A B A C (patrón complejo intercalado)
       for (let i = 0; i < patternLength; i++) {
         if (i % 2 === 0) {
-          pattern.push(availableIcons[0]); // Siempre A en posiciones pares
+          pattern.push(availableIcons[0]);
         } else {
-          pattern.push(availableIcons[1 + (Math.floor(i / 4) % 2)]); // Alterna B y C
+          pattern.push(availableIcons[1 + (Math.floor(i / 4) % 2)]);
         }
       }
       if (patternLength % 2 === 0) {
@@ -360,7 +294,6 @@ function generatePattern(round) {
       break;
 
     case "mixed":
-      // A A B C C A A B C C (patrón mixto complejo)
       const mixedPattern = [0, 0, 1, 2, 2];
       for (let i = 0; i < patternLength; i++) {
         pattern.push(availableIcons[mixedPattern[i % mixedPattern.length]]);
@@ -370,7 +303,6 @@ function generatePattern(round) {
       break;
 
     case "rotation":
-      // A B C D B C D A C D A B (rotación)
       const rotBase = Math.min(4, availableIcons.length);
       let rotOffset = 0;
       for (let i = 0; i < patternLength; i++) {
@@ -407,7 +339,6 @@ function displayPattern() {
     patternDisplay.appendChild(iconWrapper);
   });
 
-  // Agregar el signo de interrogación
   const questionDiv = document.createElement("div");
   questionDiv.className =
     "opacity-0 text-blue-400 font-bold text-3xl sm:text-4xl";
@@ -415,7 +346,6 @@ function displayPattern() {
   questionDiv.style.animation = `fadeIn 0.5s ease-out ${currentPattern.length * 0.1}s forwards, pulse 1s ease-in-out ${currentPattern.length * 0.1}s infinite`;
   patternDisplay.appendChild(questionDiv);
 
-  // Reinicializar Lucide para los nuevos iconos
   lucide.createIcons();
 }
 
@@ -423,14 +353,11 @@ function displayPattern() {
 function generateOptions() {
   const options = [correctAnswer];
 
-  // Obtener iconos únicos del patrón
   const usedIcons = [...new Set(currentPattern.map((i) => i.name))];
 
-  // Crear pool de iconos para opciones
   const numIcons = Math.min(8 + Math.floor(currentRound / 2), 20);
   let availableIcons = getRandomIcons(numIcons, currentRound);
 
-  // Agregar opciones incorrectas
   while (options.length < 4) {
     const randomIcon =
       availableIcons[Math.floor(Math.random() * availableIcons.length)];
@@ -466,7 +393,6 @@ function displayOptions() {
     optionsDisplay.appendChild(optionBtn);
   });
 
-  // Reinicializar Lucide
   lucide.createIcons();
 }
 
@@ -475,7 +401,6 @@ function checkAnswer(selectedIcon) {
   const feedback = document.getElementById("feedback");
   const optionsDisplay = document.getElementById("options-display");
 
-  // Deshabilitar botones
   optionsDisplay.querySelectorAll("button").forEach((btn) => {
     btn.disabled = true;
     btn.style.opacity = "0.5";
@@ -487,9 +412,8 @@ function checkAnswer(selectedIcon) {
     selectedIcon.color === correctAnswer.color;
 
   if (isCorrect) {
-    // Respuesta correcta
     feedback.innerHTML =
-      '<i data-lucide="check-circle" class="w-5 h-5 inline mr-1"></i> ¡Correcto!';
+      '<i data-lucide="check-circle" class="w-5 h-5 inline mr-1"></i> Correcto';
     feedback.className =
       "text-center text-sm sm:text-base font-semibold h-6 sm:h-8 text-green-500";
     score += 10 * currentRound;
@@ -503,9 +427,8 @@ function checkAnswer(selectedIcon) {
       }
     }, 1500);
   } else {
-    // Respuesta incorrecta
     feedback.innerHTML =
-      '<i data-lucide="x-circle" class="w-5 h-5 inline mr-1"></i> Inténtalo de nuevo';
+      '<i data-lucide="x-circle" class="w-5 h-5 inline mr-1"></i> Intentalo de nuevo';
     feedback.className =
       "text-center text-sm sm:text-base font-semibold h-6 sm:h-8 text-red-500";
     lives--;
@@ -517,7 +440,6 @@ function checkAnswer(selectedIcon) {
       }, 1500);
     } else {
       setTimeout(() => {
-        // Rehabilitar botones
         optionsDisplay.querySelectorAll("button").forEach((btn) => {
           btn.disabled = false;
           btn.style.opacity = "1";
@@ -628,30 +550,61 @@ function resetGame() {
   startRound();
 }
 
-// Botón continuar a sorpresa
-document.getElementById("continue-btn").addEventListener("click", () => {
-  const victoryScreen = document.getElementById("victory-screen");
-  const surpriseScreen = document.getElementById("surprise-screen");
-
-  victoryScreen.style.opacity = "0";
-  victoryScreen.style.transition = "opacity 0.5s";
-
-  setTimeout(() => {
-    victoryScreen.classList.add("hidden");
-    surpriseScreen.classList.remove("hidden");
-    window.scrollTo(0, 0);
-
-    // Reinicializar iconos en la página sorpresa
-    setTimeout(() => {
-      lucide.createIcons();
-    }, 100);
-  }, 500);
-});
-
-// Inicializar juego al cargar la página
+// Inicializar todo cuando el DOM esté listo
 window.addEventListener("DOMContentLoaded", () => {
   createParticles();
-  lucide.createIcons();
   updateDifficultyLevel();
   startRound();
+
+  setTimeout(() => {
+    if (typeof lucide !== "undefined") {
+      lucide.createIcons();
+    }
+  }, 100);
+
+  // Botón de inicio
+  const startBtn = document.getElementById("start-game-btn");
+  if (startBtn) {
+    startBtn.addEventListener("click", () => {
+      const startScreen = document.getElementById("start-screen");
+      const gameScreen = document.getElementById("game-screen");
+
+      startScreen.style.opacity = "0";
+      startScreen.style.transition = "opacity 0.5s";
+
+      setTimeout(() => {
+        startScreen.classList.add("hidden");
+        gameScreen.classList.remove("hidden");
+        gameScreen.style.opacity = "0";
+
+        setTimeout(() => {
+          gameScreen.style.transition = "opacity 0.5s";
+          gameScreen.style.opacity = "1";
+          lucide.createIcons();
+        }, 50);
+      }, 500);
+    });
+  }
+
+  // Botón continuar a sorpresa
+  const continueBtn = document.getElementById("continue-btn");
+  if (continueBtn) {
+    continueBtn.addEventListener("click", () => {
+      const victoryScreen = document.getElementById("victory-screen");
+      const surpriseScreen = document.getElementById("surprise-screen");
+
+      victoryScreen.style.opacity = "0";
+      victoryScreen.style.transition = "opacity 0.5s";
+
+      setTimeout(() => {
+        victoryScreen.classList.add("hidden");
+        surpriseScreen.classList.remove("hidden");
+        window.scrollTo(0, 0);
+
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 100);
+      }, 500);
+    });
+  }
 });
