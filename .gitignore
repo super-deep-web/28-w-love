@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build temporal
+input.css
+
+# Config files que NO se necesitan en Vercel
+tailwind.config.js
+package.json
+package-lock.json
+
+# Otros
+.DS_Store
+*.log

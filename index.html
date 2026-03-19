@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>💙 2.8</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+      * {
+        font-family: "Quicksand", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #e3f2fd 0%, #e1bee7 100%);
+        min-height: 100vh;
+      }
+
+      /* Animaciones */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .pattern-option {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .pattern-option:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(100, 181, 246, 0.4);
+      }
+
+      .pattern-option:active {
+        transform: scale(0.98);
+      }
+
+      /* Partículas de fondo */
+      .particle {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        background: rgba(100, 181, 246, 0.3);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: particleFloat 10s linear infinite;
+      }
+
+      @keyframes particleFloat {
+        0% {
+          transform: translateY(100vh) translateX(0);
+          opacity: 0;
+        }
+
+        10% {
+          opacity: 1;
+        }
+
+        90% {
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateY(-100vh) translateX(100px);
+          opacity: 0;
+        }
+      }
+
+      .image-placeholder {
+        background: linear-gradient(135deg, #b3e5fc 0%, #e1bee7 100%);
+        border: 3px dashed #64b5f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64b5f6;
+        font-weight: 600;
+      }
+
+      /* Iconos de patrones */
+      .pattern-icon {
+        width: 48px;
+        height: 48px;
+      }
+
+      @media (max-width: 640px) {
+        .pattern-icon {
+          width: 36px;
+          height: 36px;
+        }
+      }
+
+      /* Mejoras responsive */
+      @media (max-width: 640px) {
+        .pattern-option {
+          padding: 1rem !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="overflow-x-hidden">
+    <!-- Partículas decorativas -->
+    <div id="particles"></div>
+
+    <!-- Pantalla de Inicio -->
+    <div
+      id="start-screen"
+      class="min-h-screen flex items-center justify-center p-4"
+    >
+      <div
+        class="max-w-xl w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-10 fade-in"
+      >
+        <!-- Icono principal -->
+        <div class="flex justify-center mb-2">
+          <div
+            class="bg-gradient-to-br from-blue-400 to-purple-400 p-4 rounded-full float"
+          >
+            <i data-lucide="heart" class="w-12 h-12 text-white"></i>
+          </div>
+        </div>
+
+        <h1
+          class="text-3xl sm:text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4"
+        >
+          ¡Hola, Mi Amor!
+        </h1>
+        <p
+          class="text-base sm:text-lg text-gray-700 mb-2 text-center leading-relaxed"
+        >
+          Preparé algo especial para ti. Completa este desafío para descubrirlo.
+        </p>
+
+        <!-- Instrucciones compactas -->
+        <div
+          class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 sm:p-6 mb-2"
+        >
+          <div class="flex items-center gap-2 mb-3">
+            <i data-lucide="info" class="w-5 h-5 text-blue-500"></i>
+            <h2 class="text-lg sm:text-xl font-bold text-blue-500">
+              Cómo Jugar
+            </h2>
+          </div>
+          <ul class="space-y-2 text-sm sm:text-base text-gray-700">
+            <li class="flex items-start gap-2">
+              <i
+                data-lucide="target"
+                class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"
+              ></i>
+              <span>Identifica qué icono sigue en el patrón</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i
+                data-lucide="trophy"
+                class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"
+              ></i>
+              <span>Completa 10 rondas para ganar</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i
+                data-lucide="heart"
+                class="w-5 h-5 text-pink-400 flex-shrink-0 mt-0.5"
+              ></i>
+              <span>Tienes 5 vidas</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Ejemplo compacto -->
+        <div class="bg-white/60 rounded-xl p-4 mb-2">
+          <p class="text-sm text-gray-600 mb-2 text-center">Ejemplo:</p>
+          <div class="flex justify-center items-center gap-2 mb-2">
+            <i data-lucide="circle" class="w-8 h-8 text-blue-500"></i>
+            <i data-lucide="square" class="w-8 h-8 text-purple-500"></i>
+            <i data-lucide="circle" class="w-8 h-8 text-blue-500"></i>
+            <i data-lucide="square" class="w-8 h-8 text-purple-500"></i>
+            <span class="text-2xl text-blue-400 font-bold">?</span>
+          </div>
+          <p class="text-sm text-center text-gray-600">
+            Respuesta:
+            <i
+              data-lucide="circle"
+              class="w-5 h-5 text-blue-500 inline-block"
+            ></i>
+          </p>
+        </div>
+
+        <button
+          id="start-game-btn"
+          class="w-full bg-gradient-to-r from-blue-400 to-purple-400 text-white px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 mb-2"
+        >
+          <i data-lucide="play" class="w-5 h-5"></i>
+          Comenzar
+        </button>
+
+        <button
+          id="skip-to-victory-btn"
+          class="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white px-6 py-2 rounded-full text-sm font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 opacity-50 hover:opacity-100"
+        >
+          <i data-lucide="fast-forward" class="w-4 h-4"></i>
+          Saltar (Prueba)
+        </button>
+      </div>
+    </div>
+
+    <!-- Pantalla del Juego -->
+    <div
+      id="game-screen"
+      class="hidden min-h-screen flex items-center justify-center p-3 sm:p-4"
+    >
+      <div
+        class="max-w-2xl w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-4 sm:p-8 fade-in"
+      >
+        <!-- Header compacto -->
+        <div class="text-center mb-4 sm:mb-6">
+          <div class="flex items-center justify-center gap-2 mb-2">
+            <i
+              data-lucide="gamepad-2"
+              class="w-6 h-6 sm:w-8 sm:h-8 text-blue-400"
+            ></i>
+            <h1 class="text-2xl sm:text-3xl font-bold text-blue-400">
+              Desafío de Patrones
+            </h1>
+          </div>
+        </div>
+
+        <!-- Estadísticas compactas -->
+        <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+          <div
+            class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3 text-center"
+          >
+            <div class="flex items-center justify-center gap-1 mb-1">
+              <i data-lucide="hash" class="w-4 h-4 text-blue-500"></i>
+              <p class="text-xs text-gray-600">Ronda</p>
+            </div>
+            <p
+              class="text-xl sm:text-2xl font-bold text-blue-500"
+              id="round-number"
+            >
+              1
+            </p>
+          </div>
+          <div
+            class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-3 text-center"
+          >
+            <div class="flex items-center justify-center gap-1 mb-1">
+              <i data-lucide="heart" class="w-4 h-4 text-pink-500"></i>
+              <p class="text-xs text-gray-600">Vidas</p>
+            </div>
+            <p class="text-xl sm:text-2xl font-bold text-pink-500" id="lives">
+              5
+            </p>
+          </div>
+          <div
+            class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-3 text-center"
+          >
+            <div class="flex items-center justify-center gap-1 mb-1">
+              <i data-lucide="star" class="w-4 h-4 text-purple-500"></i>
+              <p class="text-xs text-gray-600">Puntos</p>
+            </div>
+            <p class="text-xl sm:text-2xl font-bold text-purple-500" id="score">
+              0
+            </p>
+          </div>
+        </div>
+
+        <!-- Indicador de dificultad -->
+        <div class="mb-4 text-center">
+          <div
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-50 to-red-50 px-4 py-2 rounded-full"
+          >
+            <i data-lucide="zap" class="w-4 h-4 text-orange-500"></i>
+            <span
+              class="text-xs sm:text-sm font-semibold text-orange-700"
+              id="difficulty-level"
+              >Fácil</span
+            >
+          </div>
+        </div>
+
+        <!-- Área del patrón -->
+        <div class="mb-4 sm:mb-6">
+          <div class="flex items-center justify-center gap-2 mb-3">
+            <i data-lucide="help-circle" class="w-5 h-5 text-gray-600"></i>
+            <h3 class="text-sm sm:text-base font-semibold text-gray-700">
+              ¿Qué sigue?
+            </h3>
+          </div>
+          <div
+            id="pattern-display"
+            class="flex justify-center items-center gap-2 sm:gap-3 mb-4 flex-wrap min-h-[60px]"
+          >
+            <!-- Patrones se generan aquí -->
+          </div>
+        </div>
+
+        <!-- Opciones de respuesta -->
+        <div class="mb-4">
+          <div id="options-display" class="grid grid-cols-2 gap-2 sm:gap-3">
+            <!-- Opciones se generan aquí -->
+          </div>
+        </div>
+
+        <!-- Mensaje de feedback -->
+        <div
+          id="feedback"
+          class="text-center text-sm sm:text-base font-semibold h-6 sm:h-8"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Pantalla de Victoria -->
+    <div
+      id="victory-screen"
+      class="hidden min-h-screen flex items-center justify-center p-4"
+    >
+      <div
+        class="max-w-xl w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-10 text-center fade-in"
+      >
+        <div class="flex justify-center mb-4">
+          <div
+            class="bg-gradient-to-br from-yellow-400 to-orange-400 p-4 rounded-full"
+          >
+            <i data-lucide="trophy" class="w-16 h-16 text-white"></i>
+          </div>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-blue-400 mb-4">
+          ¡Felicidades mi amor!
+        </h2>
+        <p class="text-base sm:text-lg text-gray-700 mb-6">
+          Me alegro muchísimo que hayas logrado completar el jueguito<br
+            class="hidden sm:block"
+          />
+          Ahorita viene tu sorpresa. Te amo muchísimo.
+        </p>
+        <button
+          id="continue-btn"
+          class="w-full sm:w-auto bg-gradient-to-r from-blue-400 to-purple-400 text-white px-8 sm:px-12 py-3 sm:py-4 rounded-full text-base sm:text-xl font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 mx-auto"
+        >
+          <i data-lucide="gift" class="w-5 h-5"></i>
+          Ver Sorpresa
+        </button>
+      </div>
+    </div>
+
+    <!-- Pantalla Sorpresa -->
+    <div id="surprise-screen" class="hidden">
+      <div class="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50">
+        <!-- Hero Section -->
+        <section class="container mx-auto px-4 py-12 sm:py-20">
+          <div class="max-w-3xl mx-auto text-center fade-in">
+            <div class="flex justify-center mb-4">
+              <i
+                data-lucide="heart"
+                class="w-16 h-16 sm:w-20 sm:h-20 text-blue-400"
+              ></i>
+            </div>
+            <h1
+              class="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4 sm:mb-6"
+            >
+              Para mi princesita hermosa
+            </h1>
+            <p
+              class="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed"
+            >
+              Preparado con muchísimo amor porque tú eres la persona que llena
+              mi vida de colores y haces que cada día quiera vivirlo por siempre
+              junto a tí.
+            </p>
+          </div>
+        </section>
+
+        <!-- Sección 1 -->
+        <section class="container mx-auto px-4 py-8 sm:py-12">
+          <div class="max-w-5xl mx-auto">
+            <div
+              class="bg-white/70 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-8 fade-in"
+            >
+              <div class="grid sm:grid-cols-2 gap-6 sm:gap-8 items-center">
+                <div>
+                  <p
+                    class="text-base text-gray-700 leading-relaxed mb-3 sm:mb-4"
+                  >
+                    Te lo he dicho muchas veces mi amor, pero ahí te va, yo sé
+                    que sabes muy bien y te encanta asi como a mi decirte lo
+                    muchísimo que te amo, y que claro es un amor tan puro, tan
+                    grande, tan infinito que no te piensas hasta donde puede
+                    llegar que prácticamente es inagotable.
+                  </p>
+                  <p class="text-base text-gray-700 leading-relaxed">
+                    En todo caso mi amor, tardaría años, miles de años, vidas
+                    infinitas y todo lo que sea posible en cuanto a espacio y en
+                    tiempo como para poder darte todo mi amor, y eso es
+                    justamente lo que quiero porque solo así sabré y te tendré
+                    conmigo a mi lado por siempre.
+                  </p>
+                </div>
+                <div class="relative w-full max-w-xs mx-auto">
+                  <img
+                    src="./images/stitch1.jpg"
+                    alt="Foto 1"
+                    class="rounded-xl sm:rounded-2xl w-full shadow-lg"
+                    style="
+                      aspect-ratio: 9/16;
+                      object-fit: cover;
+                      max-height: 400px;
+                    "
+                    onerror="
+                      this.style.display = 'none';
+                      this.nextElementSibling.style.display = 'flex';
+                    "
+                  />
+                  <div
+                    class="image-placeholder rounded-xl sm:rounded-2xl shadow-lg text-sm sm:text-base"
+                    style="aspect-ratio: 9/16; display: none"
+                  >
+                    📷 stitch1.jpg
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección 2 -->
+        <section class="container mx-auto px-4 py-8 sm:py-12">
+          <div class="max-w-5xl mx-auto">
+            <div
+              class="bg-white/70 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-8 fade-in"
+            >
+              <div class="grid sm:grid-cols-2 gap-6 sm:gap-8 items-center">
+                <div
+                  class="order-2 sm:order-1 relative w-full max-w-xs mx-auto"
+                >
+                  <img
+                    src="./images/stitch2.jpg"
+                    alt="Foto 2"
+                    class="rounded-xl sm:rounded-2xl w-full shadow-lg"
+                    style="
+                      aspect-ratio: 9/16;
+                      object-fit: cover;
+                      max-height: 400px;
+                    "
+                    onerror="
+                      this.style.display = 'none';
+                      this.nextElementSibling.style.display = 'flex';
+                    "
+                  />
+                  <div
+                    class="image-placeholder rounded-xl sm:rounded-2xl shadow-lg text-sm sm:text-base"
+                    style="aspect-ratio: 9/16; display: none"
+                  >
+                    📷 stitch2.jpg
+                  </div>
+                </div>
+                <div class="order-1 sm:order-2">
+                  <p
+                    class="text-base text-gray-700 leading-relaxed mb-3 sm:mb-4"
+                  >
+                    Te diré que eres todo lo que alguna vez soñe en encontrar en
+                    esa persona que me acompañaría por siempre, por toda la
+                    vida, pero no es suficiente, porque digo eres todo eso y
+                    muchísimo más, me hiciste darme cuenta que hay alguien capaz
+                    de hacer todo y dar todo por alguien como yo y aún así poder
+                    saber que al día siguiente podrá ser y será aún mejor que el
+                    día anterior.
+                  </p>
+                  <p class="text-base text-gray-700 leading-relaxed">
+                    Así que en serio te doy muchas gracias porque aunque creas
+                    que haces poco o nada, en realidad para mi haces muchísimo,
+                    vales muchísimo para mi, eres parte importante ahora de mi
+                    vida y sin ti prácticamente no podría seguir.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección 3 -->
+        <section class="container mx-auto px-4 py-8 sm:py-12">
+          <div class="max-w-5xl mx-auto">
+            <div
+              class="bg-white/70 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-8 fade-in"
+            >
+              <div class="grid sm:grid-cols-2 gap-6 sm:gap-8 items-center">
+                <div>
+                  <p
+                    class="text-base text-gray-700 leading-relaxed mb-3 sm:mb-4"
+                  >
+                    Por eso mismo tienes que quedarte conmigo por siempre, bueno
+                    tu sabes que yo soy todo tuyo de por vida y no hay nadie ni
+                    habrá algo que me pueda separar de ti, porque yo voy muy en
+                    serio contigo, yo dejo en tus manos mi corazón para que lo
+                    cuides siempre porque tengo la seguridad que lo harás muy
+                    bien.
+                  </p>
+                  <p class="text-base text-gray-700 leading-relaxed">
+                    Y por mi parte también de prometo si me lo permites cuidar
+                    de tu corazón, cuidar de ti mi amor, que tengas siempre en
+                    mi las esperanzas de poder formar juntos todo lo que
+                    queremos y deseamos, formar esa hermosa familia, ese hogar
+                    que tanto soñamos pero sobre todo el dar al otro la
+                    felicidad que tanto nos merecemos.
+                  </p>
+                </div>
+                <div class="relative w-full max-w-xs mx-auto">
+                  <img
+                    src="./images/stitch3.jpg"
+                    alt="Foto 3"
+                    class="rounded-xl sm:rounded-2xl w-full shadow-lg"
+                    style="
+                      aspect-ratio: 9/16;
+                      object-fit: cover;
+                      max-height: 400px;
+                    "
+                    onerror="
+                      this.style.display = 'none';
+                      this.nextElementSibling.style.display = 'flex';
+                    "
+                  />
+                  <div
+                    class="image-placeholder rounded-xl sm:rounded-2xl shadow-lg text-sm sm:text-base"
+                    style="aspect-ratio: 9/16; display: none"
+                  >
+                    📷 stitch3.jpg
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección 4 -->
+        <section class="container mx-auto px-4 py-8 sm:py-12">
+          <div class="max-w-5xl mx-auto">
+            <div
+              class="bg-white/70 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-8 fade-in"
+            >
+              <div class="grid sm:grid-cols-2 gap-6 sm:gap-8 items-center">
+                <div
+                  class="order-2 sm:order-1 relative w-full max-w-xs mx-auto"
+                >
+                  <img
+                    src="./images/stitch4.png"
+                    alt="Foto 4"
+                    class="rounded-xl sm:rounded-2xl w-full shadow-lg"
+                    style="
+                      aspect-ratio: 9/16;
+                      object-fit: cover;
+                      max-height: 400px;
+                    "
+                    onerror="
+                      this.style.display = 'none';
+                      this.nextElementSibling.style.display = 'flex';
+                    "
+                  />
+                  <div
+                    class="image-placeholder rounded-xl sm:rounded-2xl shadow-lg text-sm sm:text-base"
+                    style="aspect-ratio: 9/16; display: none"
+                  >
+                    📷 stitch4.jpg
+                  </div>
+                </div>
+                <div class="order-1 sm:order-2">
+                  <p
+                    class="text-base text-gray-700 leading-relaxed mb-3 sm:mb-4"
+                  >
+                    Ojalá poder lograr todo junto a ti muy pronto, lo antes
+                    posible, aunque tal vez ahora parezca un poco lejano, pero
+                    será poco a poco que podremos conseguirlo juntos, porque
+                    esto también es algo que sé que podremos ir construyendo
+                    juntos, solo tu y yo.
+                  </p>
+                  <p class="text-base text-gray-700 leading-relaxed">
+                    Quiero vivir cada día contigo, cada instante, cada segundo,
+                    porque en serio me encanta poder vivirlos contigo, porque te
+                    digo que poco a poco, sin saberlo, estaremos más cerca y
+                    estaremos próximos a poder conseguir todo lo que queremos,
+                    te lo prometo, te prometo seguir contigo construyendo
+                    nuestro futuro juntos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Mensaje Final -->
+        <section class="container mx-auto px-4 py-12 sm:py-16">
+          <div
+            class="max-w-3xl mx-auto text-center bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-12 fade-in"
+          >
+            <div class="flex justify-center mb-4">
+              <i
+                data-lucide="gift"
+                class="w-12 h-12 sm:w-16 sm:h-16 text-blue-400"
+              ></i>
+            </div>
+            <h2
+              class="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4 sm:mb-6"
+            >
+              Te Amo Infinitamente
+            </h2>
+            <p class="text-base sm:text-lg text-gray-700 leading-relaxed">
+              Felices 2.8 añitos mi amor, espero que te haya gustado todo esto,
+              bueno, yo sé que si, espero el siguiente mes para poderlo celebrar
+              contigo.
+            </p>
+          </div>
+        </section>
+
+        <div class="h-12"></div>
+      </div>
+    </div>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      // Inicializar Lucide
+      lucide.createIcons();
+    </script>
+
+    <script src="game.js"></script>
+    <script src="surprise.js"></script>
+  </body>
+</html>
